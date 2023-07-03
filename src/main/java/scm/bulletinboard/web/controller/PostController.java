@@ -1,6 +1,5 @@
 package scm.bulletinboard.web.controller;
 
-
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,24 +20,24 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-
     @GetMapping("/posts/index")
     public ModelAndView postList(Model model) {
         ModelAndView postListView = new ModelAndView("posts/index");
-        List<Post> posts=this.postService.getAllPosts();
-        postListView.addObject("posts",posts);
+        List<Post> posts = this.postService.getAllPosts();
+        postListView.addObject("posts", posts);
         return postListView;
     }
 
     @GetMapping("/posts/create")
-    public ModelAndView createPost(Model model){
+    public ModelAndView createPost(Model model) {
         ModelAndView postCreateView = new ModelAndView("posts/create");
-        postCreateView.addObject("postForm",new PostForm());
+        postCreateView.addObject("postForm", new PostForm());
         return postCreateView;
     }
 
     @PostMapping("/posts/add")
-    public String addPost(@ModelAttribute("postForm") @Valid PostForm postForm, BindingResult bindingResult,Model model ) {
+    public String addPost(@ModelAttribute("postForm") @Valid PostForm postForm, BindingResult bindingResult,
+            Model model) {
         if (bindingResult.hasErrors()) {
             return "posts/create";
         }
@@ -47,7 +46,7 @@ public class PostController {
     }
 
     @PostMapping("/posts/save")
-    public ModelAndView savePost(@ModelAttribute("postForm") PostForm postForm){
+    public ModelAndView savePost(@ModelAttribute("postForm") PostForm postForm) {
         this.postService.savePost(postForm);
         ModelAndView postListView = new ModelAndView("redirect:/posts/index");
         return postListView;
@@ -62,7 +61,8 @@ public class PostController {
     }
 
     @PostMapping("/posts/update")
-    public String updatePost(@ModelAttribute("postForm") @Valid PostForm postForm, BindingResult bindingResult,Model model ) {
+    public String updatePost(@ModelAttribute("postForm") @Valid PostForm postForm, BindingResult bindingResult,
+            Model model) {
         if (bindingResult.hasErrors()) {
             return "posts/edit";
         }
@@ -83,7 +83,7 @@ public class PostController {
     }
 
     @PostMapping("/posts/delete")
-    public ModelAndView deletePost(@RequestParam("id") Long postId){
+    public ModelAndView deletePost(@RequestParam("id") Long postId) {
         Post post = postService.getPostById(postId);
         if (post != null) {
             post.setDeletedAt(new Date());

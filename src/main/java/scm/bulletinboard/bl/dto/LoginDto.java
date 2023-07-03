@@ -9,7 +9,7 @@ public class LoginDto implements Serializable {
     private String email;
     private String password;
     private String type;
-    private int id;
+    private Long id;
     public String getEmail() {
         return email;
     }
@@ -28,10 +28,10 @@ public class LoginDto implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
-    public int getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public LoginDto() {

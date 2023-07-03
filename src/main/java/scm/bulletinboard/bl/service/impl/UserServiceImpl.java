@@ -7,12 +7,15 @@ import org.springframework.transaction.annotation.Transactional;
 import scm.bulletinboard.bl.service.UserService;
 import scm.bulletinboard.persistance.dao.UserDao;
 import scm.bulletinboard.persistance.entity.User;
+import scm.bulletinboard.web.form.UserForm;
 
+import java.util.Date;
 import java.util.List;
 
 @Transactional(propagation = Propagation.REQUIRED)
 @Service
 public class UserServiceImpl implements UserService {
+
     private final UserDao userDao;
 
     @Autowired
@@ -22,5 +25,17 @@ public class UserServiceImpl implements UserService {
 
     public List<User> getAllUsers() {
         return userDao.getAllUsers();
+    }
+
+    public void saveUser(UserForm userForm){
+        this.userDao.saveUser(userForm, new Date());
+    }
+
+    public User getUserById(Long userId){
+        return userDao.getUserById(userId);
+    }
+
+    public void deleteUser(User user){
+        this.userDao.deleteUser(user);
     }
 }

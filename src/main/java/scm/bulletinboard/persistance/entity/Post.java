@@ -37,6 +37,7 @@ public class Post implements Serializable {
     public Post(){
         super();
     }
+    
     public Post(PostForm postForm){
         this.title = postForm.getTitle();
         this.description = postForm.getDescription();

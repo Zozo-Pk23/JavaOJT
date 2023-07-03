@@ -2,18 +2,18 @@ package scm.bulletinboard.persistance.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import scm.bulletinboard.web.form.UserForm;
+
 import java.util.Date;
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
 @Table(name = "users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     @Column(name = "name")
     private String name;
     @Column(name = "email")
@@ -42,4 +42,26 @@ public class User {
     private Date updatedAt;
     @Column(name = "deleted_at")
     private Date deletedAt;
+
+    public User() {
+        super();
+    }
+
+    public User(UserForm userForm) {
+        this.name = userForm.getName();
+        this.email = userForm.getEmail();
+        this.password = userForm.getAddress();
+        this.profile = userForm.getProfile();
+        this.type = userForm.getType();
+        this.phone = userForm.getPhone();
+        this.dob = userForm.getDob();
+        this.address = userForm.getAddress();
+        this.createdUserId = userForm.getCreatedUserId();
+        this.updatedUserId = userForm.getUpdatedUserId();
+        this.deletedUserId = userForm.getDeletedUserId();
+        this.createdAt = userForm.getCreatedAt();
+        this.updatedAt = userForm.getUpdatedAt();
+        this.deletedAt = userForm.getDeletedAt();
+    }
+
 }
