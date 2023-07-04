@@ -11,40 +11,27 @@
             </head>
 
             <body>
-
                 <jsp:include page="../common/header.jsp" />
                 <div class="container my-2">
                     <div class="card">
-                        <div class="card-header bg-success text-light">User Create</div>
+                        <div class="card-header bg-success text-light">User Edit</div>
                         <div class="card-body">
-                            <form:form action="/SCMBulletin_war/users/add" method="post" modelAttribute="userForm"
+                            <form:form action="/SCMBulletin_war/users/update" method="post" modelAttribute="userForm"
                                 enctype="multipart/form-data">
+                                <form:input path="password" id="password" class="form-control" value="${userProfile.password}" type="hidden" />
+                                <form:input path="id" id="id" class="form-control" value="${userProfile.id}" type="hidden" />
                                 <div class="form-group row">
                                     <label for="name" class="col-sm-2 col-form-label">Name</label>
                                     <div class="col-sm-10">
-                                        <form:input path="name" id="name" class="form-control" />
+                                        <form:input path="name" id="name" class="form-control" value="${userProfile.name}" />
                                         <form:errors path="name" cssClass="text-danger" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="email" class="col-sm-2 col-form-label">Email</label>
                                     <div class="col-sm-10">
-                                        <form:input path="email" id="email" class="form-control" />
+                                        <form:input path="email" id="email" class="form-control" value="${userProfile.email}" />
                                         <form:errors path="email" cssClass="text-danger" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="password" class="col-sm-2 col-form-label">Password</label>
-                                    <div class="col-sm-10">
-                                        <form:input path="password" id="password" class="form-control"
-                                            type="password" />
-                                        <form:errors path="password" cssClass="text-danger" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="password" class="col-sm-2 col-form-label">Confirm Password</label>
-                                    <div class="col-sm-10">
-                                        <input type="password" class="form-control" name="confirmPassword">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -59,30 +46,37 @@
                                 <div class="form-group row">
                                     <label for="phone" class="col-sm-2 col-form-label">phone</label>
                                     <div class="col-sm-10">
-                                        <form:input path="phone" id="phone" class="form-control" />
+                                        <form:input path="phone" id="phone" class="form-control" value="${userProfile.phone}"/>
                                         <form:errors path="phone" cssClass="text-danger" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="dob" class="col-sm-2 col-form-label">Date Of Birth</label>
                                     <div class="col-sm-10">
-                                        <form:input path="dob" id="dob" class="form-control" type="date" />
+                                        <form:input path="dob" id="dob" class="form-control" type="date" value="${userProfile.dob}"/>
                                         <form:errors path="dob" cssClass="text-danger" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="address" class="col-sm-2 col-form-label">Address</label>
                                     <div class="col-sm-10">
-                                        <form:input path="address" id="address" class="form-control" />
+                                        <form:input path="address" id="address" class="form-control" value="${userProfile.address}"/>
                                         <form:errors path="address" cssClass="text-danger" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="profile" class="col-sm-2 col-form-label">Profile</label>
+                                    <label for="oldprofile" class="col-sm-2 col-form-label">Old Profile</label>
+                                    <div class="col-sm-10">
+                                        <form:input path="profile" id="oldprofile" class="form-control" value="${userProfile.profile}"/>
+                                        <img src="${pageContext.request.contextPath}/resources/profiles/${userProfile.profile}"
+                                        alt="User Profile Image" style="width: 100px;height: 100px;" path="profile">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="profileFile" class="col-sm-2 col-form-label">Profile</label>
                                     <div class="col-sm-10">
                                         <form:input path="profileFile" type="file" class="form-control"
                                             name="profileFile" />
-                                        <form:input path="profile" id="profile" class="form-control" type="hidden" />
                                         <form:errors path="profileFile" cssClass="text-danger" />
                                     </div>
                                 </div>

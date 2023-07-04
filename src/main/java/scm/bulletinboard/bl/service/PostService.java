@@ -7,10 +7,14 @@ import java.util.List;
 
 public interface PostService {
     List<Post> getAllPosts();
+
     public void savePost(PostForm postForm);
 
     public Post getPostById(Long id);
 
     public void updatePost(Post post);
+
     public void deletePost(Post post);
+
+    public void upload(List<String[]> csvData);
 }

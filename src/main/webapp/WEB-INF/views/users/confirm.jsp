@@ -11,7 +11,8 @@
             </head>
 
             <body>
-                <div class="container">
+                <jsp:include page="../common/header.jsp" />
+                <div class="container my-2">
                     <div class="card">
                         <div class="card-header bg-success text-light">User Confirm</div>
                         <div class="card-body">
@@ -75,7 +76,8 @@
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label">profile</label>
                                     <div class="col-sm-10">
-                                        <img src="${pageContext.request.contextPath}/resources/profiles/${userForm.profile}" alt="User Profile" style="height: 100px;width: 100px;">
+                                        <img src="${pageContext.request.contextPath}/resources/profiles/${userForm.profile}"
+                                            alt="User Profile" style="height: 100px;width: 100px;">
                                         <input type="hidden" name="profile" value="${userForm.profile}">
                                     </div>
                                 </div>
@@ -89,6 +91,9 @@
                         </div>
                     </div>
                 </div>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+                crossorigin="anonymous"></script>
             </body>
 
             </html>

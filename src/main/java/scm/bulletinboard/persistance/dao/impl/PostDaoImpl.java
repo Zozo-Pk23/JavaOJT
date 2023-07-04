@@ -52,4 +52,10 @@ public class PostDaoImpl implements PostDao {
         Session session = sessionFactory.getCurrentSession();
         session.update(post);
     }
+
+    @Override
+    public void upload(Post post){
+        Session session = sessionFactory.getCurrentSession();
+        session.save(post);
+    }
 }

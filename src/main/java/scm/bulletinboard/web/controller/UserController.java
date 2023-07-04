@@ -18,15 +18,14 @@ import scm.bulletinboard.web.form.UserForm;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 @Controller
 public class UserController {
@@ -96,4 +95,57 @@ public class UserController {
         return userListView;
     }
 
+    @GetMapping("myprofile")
+    public ModelAndView myProfile() {
+        ModelAndView myProfile = new ModelAndView("users/profile");
+        return myProfile;
+    }
+
+    @GetMapping("users/edit")
+    public ModelAndView editUser(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        UserForm userForm = new UserForm();
+        userForm.setId(user.getId());
+        User userProfile = userService.getUserById(userForm.getId());
+        ModelAndView editUserView = new ModelAndView("users/edit");
+        editUserView.addObject("userProfile", userProfile);
+        editUserView.addObject("userForm", userForm);
+        return editUserView;
+    }
+
+    @PostMapping("users/update")
+    public String updateUser(@ModelAttribute("userForm") @Valid UserForm userForm, BindingResult bindingResult,
+            @RequestParam("profileFile") MultipartFile profileFile, Model model, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            return "users/edit";
+        }
+        if (!profileFile.isEmpty()) {
+            try {
+                String folderPath = request.getServletContext().getRealPath("/resources/profiles");
+                String fileName = profileFile.getOriginalFilename();
+                String filePath = folderPath + File.separator + fileName;
+                File directory = new File(folderPath);
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+                Path destinationPath = Paths.get(filePath);
+                profileFile.transferTo(destinationPath.toFile());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        User user = userService.getUserById(userForm.getId());
+        if (user != null) {
+            user.setName(userForm.getName());
+            user.setEmail(userForm.getEmail());
+            user.setType(userForm.getType());
+            user.setPhone(userForm.getPhone());
+            user.setDob(userForm.getDob());
+            user.setAddress(userForm.getAddress());
+            user.setProfile(profileFile.getOriginalFilename());
+            userService.updateUser(user);
+        }
+        model.addAttribute("userForm", userForm);
+        return "redirect:/users/index";
+    }
 }

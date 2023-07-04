@@ -7,14 +7,15 @@
 
                     <head>
                         <title>Title</title>
-                         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
                             rel="stylesheet"
                             integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
                             crossorigin="anonymous">
                     </head>
 
                     <body>
-                        <div class="container">
+                        <jsp:include page="../common/header.jsp" />
+                        <div class="container my-2">
                             <div class="card">
                                 <div class="card-header bg-success text-light">User List</div>
                                 <div class="card-body">
@@ -229,7 +230,6 @@
                                     </div>
                                 </div>
                             </c:forEach>
-
                             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
                             integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
                             crossorigin="anonymous"></script>

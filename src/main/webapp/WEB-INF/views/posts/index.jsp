@@ -4,7 +4,6 @@
             <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
                 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                     <html>
-
                     <head>
                         <title>Title</title>
                         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -14,7 +13,8 @@
                     </head>
 
                     <body>
-                        <div class="container">
+                        <jsp:include page="../common/header.jsp" />
+                        <div class="container my-2">
                             <div class="card">
                                 <div class="card-header bg-success text-light">Post List</div>
                                 <div class="card-body">
@@ -32,11 +32,11 @@
                                                 class="btn btn-success form-control text-light">Create</a>
                                         </div>
                                         <div class="col-2 text-center">
-                                            <a class="btn btn-success form-control text-light">Upload</a>
+                                            <a class="btn btn-success form-control text-light" href="${pageContext.request.contextPath}/posts/uploadForm">Upload</a>
                                         </div>
-                                        <form class="col-2 text-center">
-                                            <a class="btn btn-success form-control text-light">Download</a>
-                                        </form>
+                                        <form class="col-2 text-center" action="${pageContext.request.contextPath}/posts/download" method="GET">
+                                            <button class="btn btn-success form-control text-light" type="submit">Download</button>
+                                        </form>                                        
                                     </div>
                                     <table class="table">
                                         <thead class="bg-info text-light">

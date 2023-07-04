@@ -26,19 +26,32 @@ public class PostServiceImpl implements PostService {
         return postDao.getAllPosts();
     }
 
-    public void savePost(PostForm postForm){
-        this.postDao.savePost(postForm,new Date());
+    public void savePost(PostForm postForm) {
+        this.postDao.savePost(postForm, new Date());
     }
 
-    public Post getPostById(Long id){
+    public Post getPostById(Long id) {
         return postDao.getPostById(id);
     }
 
-    public void updatePost(Post post){
+    public void updatePost(Post post) {
         this.postDao.updatePost(post);
     }
 
-    public void deletePost(Post post){
+    public void deletePost(Post post) {
         this.postDao.deletePost(post);
+    }
+
+    public void upload(List<String[]> csvData) {
+        for (String[] line : csvData) {
+            String title = line[0];
+            String description = line[1];
+            String status = line[2];
+            Post post = new Post();
+            post.setTitle(title);
+            post.setDescription(description);
+            post.setStatus(status);
+            this.postDao.upload(post);
+        }
     }
 }
