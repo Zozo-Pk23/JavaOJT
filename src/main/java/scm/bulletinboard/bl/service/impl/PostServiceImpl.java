@@ -42,7 +42,7 @@ public class PostServiceImpl implements PostService {
         this.postDao.deletePost(post);
     }
 
-    public void upload(List<String[]> csvData) {
+    public void upload(List<String[]> csvData,Integer id) {
         for (String[] line : csvData) {
             String title = line[0];
             String description = line[1];
@@ -51,6 +51,10 @@ public class PostServiceImpl implements PostService {
             post.setTitle(title);
             post.setDescription(description);
             post.setStatus(status);
+            post.setCreatedAt(new Date());
+            post.setUpdatedAt(new Date());
+            post.setCreatedUserId(id);
+            post.setUpdatedUserId(id);
             this.postDao.upload(post);
         }
     }

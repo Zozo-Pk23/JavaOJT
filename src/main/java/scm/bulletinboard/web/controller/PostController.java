@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import scm.bulletinboard.bl.service.PostService;
 import scm.bulletinboard.persistance.entity.Post;
+import scm.bulletinboard.persistance.entity.User;
 import scm.bulletinboard.web.form.PostForm;
 
 import java.io.BufferedReader;
@@ -20,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -132,19 +134,19 @@ public class PostController {
     }
 
     @PostMapping("/posts/upload")
-    public String handleUpload(@RequestParam("file") MultipartFile file) {
+    public String handleUpload(@RequestParam("file") MultipartFile file, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        Integer userId = user.getId().intValue();
         try {
             InputStream inputStream = file.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            String headerLine = reader.readLine();
             String line;
             List<String[]> csvData = new ArrayList<>();
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
                 csvData.add(data);
             }
-            postService.upload(csvData);
-
+            postService.upload(csvData, userId);
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -152,5 +154,3 @@ public class PostController {
         return "redirect:/posts/index";
     }
 }
-
-

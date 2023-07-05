@@ -16,5 +16,5 @@ public interface PostService {
 
     public void deletePost(Post post);
 
-    public void upload(List<String[]> csvData);
+    public void upload(List<String[]> csvData,Integer id);
 }
