@@ -1,31 +1,21 @@
 package scm.bulletinboard.web.form;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import scm.bulletinboard.persistance.entity.User;
 
+@Data
+@NoArgsConstructor
 public class LoginForm {
-    @Email
-    @NotEmpty
+    @NotBlank(message = "Email can not be blank.")
+    @Email(message = "Email format is invaid.")
     private String email;
+    @NotBlank(message = "Password can not be blank.")
     private String password;
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    public LoginForm() {
-    }
+
     public LoginForm(User user) {
-        super();
         this.email = user.getEmail();
         this.password = user.getPassword();
     }

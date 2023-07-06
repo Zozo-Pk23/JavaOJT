@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import scm.bulletinboard.persistance.entity.Post;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+
 import java.util.Date;
 
 @Data
@@ -11,10 +13,11 @@ import java.util.Date;
 public class PostForm {
     private Long id;
 
-    @NotEmpty(message = "Title must not be Empty")
+    @NotEmpty(message = "Title must not be Empty.")
+    @Size(max = 255, message = "255 character is the maximum allowed.")
     private String title;
 
-    @NotEmpty(message = "Description must not be Empty")
+    @NotEmpty(message = "Description must not be Empty.")
     private String description;
 
     private String status;

@@ -31,9 +31,28 @@
                   </div>
                 </div>
                 <div class="form-group row">
+                  <label class="col-sm-2 col-form-label">Status</label>
+                  <div class="col-sm-10">
+                    <c:choose>
+                      <c:when test="${postForm.status == 0}">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input" type="checkbox" id="flexSwitchCheckDisabled" disabled>
+                        </div>
+                      </c:when>
+                      <c:otherwise>
+                        <div class="form-check form-switch">
+                          <input class="form-check-input" type="checkbox" id="flexSwitchCheckCheckedDisabled" checked
+                            disabled>
+                        </div>
+                      </c:otherwise>
+                    </c:choose>
+                    <input type="hidden" name="status" value="${postForm.status}">
+                  </div>
+                </div>
+                <div class="form-group row">
                   <div class="col-sm-10 offset-sm-2">
                     <button type="submit" class="btn btn-info text-light">Confirm</button>
-                    <button type="reset" class="btn btn-secondary text-light">Clear</button>
+                    <a href="#" class="btn btn-secondary text-light" onclick="cancelAction(); return false;">Cancel</a>
                   </div>
                 </div>
                 <input type="hidden" name="id" value="${postForm.id}">
@@ -41,9 +60,14 @@
             </div>
           </div>
         </div>
+        <script>
+          function cancelAction() {
+            window.history.back();
+          }
+        </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-        crossorigin="anonymous"></script>
+          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+          crossorigin="anonymous"></script>
       </body>
 
       </html>

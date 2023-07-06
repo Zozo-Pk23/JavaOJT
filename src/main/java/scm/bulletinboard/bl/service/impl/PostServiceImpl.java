@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import scm.bulletinboard.bl.service.PostService;
 import scm.bulletinboard.persistance.dao.PostDao;
 import scm.bulletinboard.persistance.entity.Post;
+import scm.bulletinboard.persistance.entity.User;
 import scm.bulletinboard.web.form.PostForm;
 
 import java.util.Date;
@@ -22,8 +23,8 @@ public class PostServiceImpl implements PostService {
         this.postDao = postDao;
     }
 
-    public List<Post> getAllPosts() {
-        return postDao.getAllPosts();
+    public List<Post> getAllPosts(int pageNumber, int pageSize, String searchQuery,User user) {
+        return postDao.getAllPosts(pageNumber, pageSize , searchQuery,user);
     }
 
     public void savePost(PostForm postForm) {
@@ -42,7 +43,7 @@ public class PostServiceImpl implements PostService {
         this.postDao.deletePost(post);
     }
 
-    public void upload(List<String[]> csvData,Integer id) {
+    public void upload(List<String[]> csvData, Integer id) {
         for (String[] line : csvData) {
             String title = line[0];
             String description = line[1];
@@ -57,5 +58,9 @@ public class PostServiceImpl implements PostService {
             post.setUpdatedUserId(id);
             this.postDao.upload(post);
         }
+    }
+
+    public int getTotalPostsCount(String searchQuery,User user) {
+        return postDao.getTotalPostsCount(searchQuery,user);
     }
 }

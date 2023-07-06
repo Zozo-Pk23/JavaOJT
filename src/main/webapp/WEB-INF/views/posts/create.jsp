@@ -19,21 +19,22 @@
                 <div class="form-group row">
                   <label for="title" class="col-sm-2 col-form-label">Title</label>
                   <div class="col-sm-10">
-                    <form:input path="title" id="title" class="form-control" />
+                    <form:input path="title" id="title" class="form-control" placeholder="Enter Title" />
                     <form:errors path="title" cssClass="text-danger" />
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="description" class="col-sm-2 col-form-label">Description</label>
                   <div class="col-sm-10">
-                    <form:input path="description" id="description" class="form-control" />
+                    <form:textarea path="description" class="form-control" id="description" rows="3"
+                      placeholder="Enter Description" />
                     <form:errors path="description" cssClass="text-danger" />
                   </div>
                 </div>
                 <div class="form-group row">
                   <div class="col-sm-10 offset-sm-2">
                     <button type="submit" class="btn btn-success text-light">Create</button>
-                    <button type="reset" class="btn btn-secondary text-light">Clear</button>
+                    <a href="${pageContext.request.contextPath}/posts/create" class="btn btn-secondary text-light">Clear</a>
                   </div>
                 </div>
               </form:form>
@@ -41,8 +42,8 @@
           </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-        crossorigin="anonymous"></script>
+          integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+          crossorigin="anonymous"></script>
       </body>
 
       </html>

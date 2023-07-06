@@ -15,31 +15,67 @@ public class Post implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "title")
     private String title;
+
     @Column(name = "description")
     private String description;
+
     @Column(name = "status")
     private String status;
+
     @Column(name = "created_user_id")
     private Integer createdUserId;
+
     @Column(name = "updated_user_id")
     private Integer updatedUserId;
+
     @Column(name = "deleted_user_id")
     private Integer deletedUserId;
+
     @Column(name = "created_at")
     private Date createdAt;
+
     @Column(name = "updated_at")
     private Date updatedAt;
+
     @Column(name = "deleted_at")
     private Date deletedAt;
 
-    public Post(){
+    @ManyToOne
+    @JoinColumn(name = "created_user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private User createdBy;
+
+    @Transient
+    private String createdUserName;
+
+    public Post() {
         super();
     }
-    
-    public Post(PostForm postForm){
+
+    public Post(PostForm postForm) {
         this.title = postForm.getTitle();
         this.description = postForm.getDescription();
+        this.status = postForm.getStatus();
+    }
+
+    public Integer getCreatedUserId() {
+        return createdUserId;
+    }
+
+    public void setCreatedUserId(Integer createdUserId) {
+        this.createdUserId = createdUserId;
+    }
+
+    public String getCreatedUserName() {
+        if (createdBy != null) {
+            return createdBy.getName();
+        }
+        return createdUserName;
+    }
+
+    public void setCreatedUserName(String createdUserName) {
+        this.createdUserName = createdUserName;
     }
 }

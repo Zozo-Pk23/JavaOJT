@@ -20,30 +20,36 @@
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label">Title</label>
                                     <div class="col-sm-10">
-                                        <p> ${postForm.title}</p>
-                                        <input type="hidden" name="title" value="${postForm.title}">
+                                        <input type="text" class="form-control" value="${postForm.title}" name="title"
+                                            readonly>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label">Description</label>
                                     <div class="col-sm-10">
-                                        <p> ${postForm.description}</p>
-                                        <input type="hidden" name="description" value="${postForm.description}">
+                                        <textarea class="form-control" rows="3" name="description"
+                                            readonly>${postForm.description}</textarea>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-10 offset-sm-2">
-                                        <button type="submit" class="btn btn-success text-light">Create</button>
-                                        <button type="reset" class="btn btn-secondary text-light">Clear</button>
+                                        <button type="submit" class="btn btn-success text-light">Confirm</button>
+                                        <a href="#" class="btn btn-secondary text-light"
+                                            onclick="cancelAction(); return false;">Cancel</a>
                                     </div>
                                 </div>
                             </form:form>
                         </div>
                     </div>
                 </div>
+                <script>
+                    function cancelAction() {
+                        window.history.back();
+                    }
+                </script>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-                crossorigin="anonymous"></script>
+                    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+                    crossorigin="anonymous"></script>
             </body>
 
             </html>

@@ -5,15 +5,20 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import scm.bulletinboard.persistance.entity.User;
+import scm.bulletinboard.web.form.LoginForm;
 
 @Transactional
 @Controller
@@ -29,25 +34,39 @@ public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView showLoginPage() {
         ModelAndView loginPage = new ModelAndView("auth/login");
-        loginPage.addObject("user", new User());
+        loginPage.addObject("loginform", new LoginForm());
         return loginPage;
     }
 
     @PostMapping("/authenticate")
-    public ModelAndView authenticate(@RequestParam("email") String email,
-                                     @RequestParam("password") String password,HttpSession session) {
-        Session hibernateSession  = sessionFactory.getCurrentSession();
-        String queryStr = "FROM User u WHERE u.email = :email AND u.password = :password";
+    public String authenticate(@ModelAttribute("loginform") @Valid LoginForm loginForm, BindingResult bindingResult,
+            @RequestParam("email") String email,
+            @RequestParam("password") String password, HttpSession session, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "auth/login";
+        }
+        Session hibernateSession = sessionFactory.getCurrentSession();
+        String queryStr = "FROM User u WHERE u.email = :email";
         Query<User> query = hibernateSession.createQuery(queryStr, User.class);
         query.setParameter("email", email);
-        query.setParameter("password", password);
         User user = query.uniqueResult();
-        if (user != null) {
-            session.setAttribute("user", user);
-            return new ModelAndView("redirect:/posts/index");
+
+        if (user == null) {
+            model.addAttribute("emailNotFound", "Email does not exists");
+            return "auth/login";
+        } else if (!user.getPassword().equals(password)) {
+            model.addAttribute("incorrectPassword", "Incorrect password!!");
+            return "auth/login";
         } else {
-            return new ModelAndView("redirect:/login");
+            session.setAttribute("user", user);
+            return "redirect:/posts/index";
         }
     }
-    
+
+    @GetMapping("logout")
+    public ModelAndView logout(HttpSession session) {
+        session.removeAttribute("user");
+        return new ModelAndView("redirect:/login");
+    }
+
 }

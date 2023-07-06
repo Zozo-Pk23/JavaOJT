@@ -30,11 +30,25 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+    private int calculateTotalPages(int pageSize, int totalPosts) {
+        return (int) Math.ceil((double) totalPosts / pageSize);
+    }
+
     @GetMapping("/posts/index")
-    public ModelAndView postList(Model model) {
+    public ModelAndView postList(@RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(required = false) String searchQuery, HttpSession session) {
+
+        User user = (User) session.getAttribute("user");
         ModelAndView postListView = new ModelAndView("posts/index");
-        List<Post> posts = this.postService.getAllPosts();
+        int pageSize = 5;
+        List<Post> posts = postService.getAllPosts(pageNumber, pageSize, searchQuery, user);
+        int totalPosts = postService.getTotalPostsCount(searchQuery, user);
         postListView.addObject("posts", posts);
+        postListView.addObject("currentPage", pageNumber);
+        postListView.addObject("totalPages", calculateTotalPages(pageSize, totalPosts));
+        postListView.addObject("totalPosts", totalPosts);
+        postListView.addObject("searchQuery", searchQuery);
+
         return postListView;
     }
 
@@ -58,15 +72,21 @@ public class PostController {
     @PostMapping("/posts/save")
     public ModelAndView savePost(@ModelAttribute("postForm") PostForm postForm) {
         this.postService.savePost(postForm);
-        ModelAndView postListView = new ModelAndView("redirect:/posts/index");
+        String message = "Post Successfully Created";
+        ModelAndView postListView = new ModelAndView("redirect:/posts/index?created=" + message);
         return postListView;
     }
 
     @GetMapping("/posts/edit")
     public ModelAndView editPost(@RequestParam("id") Long postId, Model model) {
         Post post = postService.getPostById(postId);
+        PostForm postForm = new PostForm();
+        postForm.setDescription(post.getDescription());
+        postForm.setTitle(post.getTitle());
+        postForm.setStatus(post.getStatus());
+        postForm.setId(post.getId());
         ModelAndView postEditView = new ModelAndView("/posts/edit");
-        postEditView.addObject("post", post);
+        postEditView.addObject("postForm", postForm);
         return postEditView;
     }
 
@@ -75,6 +95,9 @@ public class PostController {
             Model model) {
         if (bindingResult.hasErrors()) {
             return "posts/edit";
+        }
+        if (!"1".equals(postForm.getStatus())) {
+            postForm.setStatus("0");
         }
         model.addAttribute("postForm", postForm);
         return "posts/update";
@@ -86,9 +109,11 @@ public class PostController {
         if (post != null) {
             post.setTitle(postForm.getTitle());
             post.setDescription(postForm.getDescription());
+            post.setStatus(postForm.getStatus());
             postService.updatePost(post);
         }
-        ModelAndView postListView = new ModelAndView("redirect:/posts/index");
+        String message = "Post Successfully Edited";
+        ModelAndView postListView = new ModelAndView("redirect:/posts/index?created=" + message);
         return postListView;
     }
 
@@ -105,26 +130,27 @@ public class PostController {
 
     @GetMapping("/posts/download")
     public void downloadCSV(HttpServletResponse response) throws IOException {
-        List<Post> posts = postService.getAllPosts();
+        // List<Post> posts = postService.getAllPosts();
         StringBuilder csvData = new StringBuilder();
         csvData.append(
                 "Id,Title,Description,Status,created_user_id,updated_user_id,deleted_user_id,created_at,updated_at,deleted_at\n");
-        for (Post post : posts) {
-            csvData.append("\"").append(post.getId()).append("\",");
-            csvData.append("\"").append(post.getTitle()).append("\",");
-            csvData.append("\"").append(post.getDescription()).append("\",");
-            csvData.append("\"").append(post.getStatus()).append("\",");
-            csvData.append("\"").append(post.getCreatedUserId()).append("\",");
-            csvData.append("\"").append(post.getUpdatedUserId()).append("\",");
-            csvData.append("\"").append(post.getDeletedUserId()).append("\",");
-            csvData.append("\"").append(post.getCreatedAt()).append("\",");
-            csvData.append("\"").append(post.getUpdatedAt()).append("\",");
-            csvData.append("\"").append(post.getDeletedAt()).append("\"\n");
-        }
-        response.setContentType("text/csv");
-        response.setHeader("Content-Disposition", "attachment; filename=\"posts.csv\"");
-        response.getWriter().write(csvData.toString());
-        response.getWriter().flush();
+        // for (Post post : posts) {
+        // csvData.append("\"").append(post.getId()).append("\",");
+        // csvData.append("\"").append(post.getTitle()).append("\",");
+        // csvData.append("\"").append(post.getDescription()).append("\",");
+        // csvData.append("\"").append(post.getStatus()).append("\",");
+        // csvData.append("\"").append(post.getCreatedUserId()).append("\",");
+        // csvData.append("\"").append(post.getUpdatedUserId()).append("\",");
+        // csvData.append("\"").append(post.getDeletedUserId()).append("\",");
+        // csvData.append("\"").append(post.getCreatedAt()).append("\",");
+        // csvData.append("\"").append(post.getUpdatedAt()).append("\",");
+        // csvData.append("\"").append(post.getDeletedAt()).append("\"\n");
+        // }
+        // response.setContentType("text/csv");
+        // response.setHeader("Content-Disposition", "attachment;
+        // filename=\"posts.csv\"");
+        // response.getWriter().write(csvData.toString());
+        // response.getWriter().flush();
     }
 
     @GetMapping("/posts/uploadForm")
