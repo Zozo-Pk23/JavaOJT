@@ -30,7 +30,16 @@
                 <div class="form-group row">
                   <label class="col-sm-6 col-form-label form-label">Type</label>
                   <div class="col-sm-6">
-                    <p class="form-control-static">${sessionScope.user.type}</p>
+                    <p class="form-control-static">
+                      <c:choose>
+                        <c:when test="${sessionScope.user.type == 1}">
+                          User
+                        </c:when>
+                        <c:otherwise>
+                          Admin
+                        </c:otherwise>
+                      </c:choose>
+                    </p>
                   </div>
                 </div>
                 <div class="form-group row">
@@ -71,5 +80,6 @@
           integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
           crossorigin="anonymous"></script>
       </body>
+      <jsp:include page="../common/footer.jsp" />
 
       </html>

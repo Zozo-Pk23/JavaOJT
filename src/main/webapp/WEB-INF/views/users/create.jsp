@@ -17,8 +17,8 @@
                     <div class="card">
                         <div class="card-header bg-success text-light">User Create</div>
                         <div class="card-body">
-                            <form:form action="/SCMBulletin_war/users/add" method="post" modelAttribute="userForm"
-                                enctype="multipart/form-data">
+                            <form:form action="${pageContext.request.contextPath}/users/add" method="post"
+                                modelAttribute="userForm" enctype="multipart/form-data">
                                 <div class="form-group row">
                                     <label for="name" class="col-sm-2 col-form-label">Name</label>
                                     <div class="col-sm-10">
@@ -44,15 +44,17 @@
                                 <div class="form-group row">
                                     <label for="password" class="col-sm-2 col-form-label">Confirm Password</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control" name="confirmPassword">
+                                        <form:input path="confirmPassword" id="confirmPassword" class="form-control"
+                                            type="password" />
+                                        <form:errors path="confirmPassword" cssClass="text-danger" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="type" class="col-sm-2 col-form-label">Type</label>
                                     <div class="col-sm-10">
                                         <form:select path="type" id="type" class="form-control">
-                                            <form:option value="1">Admin</form:option>
-                                            <form:option value="0">User</form:option>
+                                            <form:option value="0">Admin</form:option>
+                                            <form:option value="1">User</form:option>
                                         </form:select>
                                     </div>
                                 </div>
@@ -73,7 +75,7 @@
                                 <div class="form-group row">
                                     <label for="address" class="col-sm-2 col-form-label">Address</label>
                                     <div class="col-sm-10">
-                                        <form:input path="address" id="address" class="form-control" />
+                                        <form:textarea path="address" class="form-control" id="address" rows="3" />
                                         <form:errors path="address" cssClass="text-danger" />
                                     </div>
                                 </div>
@@ -83,13 +85,14 @@
                                         <form:input path="profileFile" type="file" class="form-control"
                                             name="profileFile" />
                                         <form:input path="profile" id="profile" class="form-control" type="hidden" />
-                                        <form:errors path="profileFile" cssClass="text-danger" />
+                                        <form:errors path="profile" cssClass="text-danger" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-10 offset-sm-2">
                                         <button type="submit" class="btn btn-success text-light">Create</button>
-                                        <button type="reset" class="btn btn-secondary text-light">Clear</button>
+                                        <a class="btn btn-secondary text-light"
+                                            href="${pageContext.request.contextPath}/users/create">Clear</a>
                                     </div>
                                 </div>
                             </form:form>
@@ -97,8 +100,9 @@
                     </div>
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-                crossorigin="anonymous"></script>
+                    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+                    crossorigin="anonymous"></script>
+                <jsp:include page="../common/footer.jsp" />
             </body>
 
             </html>

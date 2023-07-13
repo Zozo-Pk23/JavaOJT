@@ -33,6 +33,19 @@
     <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
     </bean>
 
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="sandbox.smtp.mailtrap.io" />
+        <property name="port" value="587" />
+        <property name="username" value="806c61ec5644e8" />
+        <property name="password" value="7115317e3d1f9d" />
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+            </props>
+        </property>
+    </bean>
+
     <!-- Connection with Database Data -->
     <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"

@@ -43,13 +43,6 @@ public class Post implements Serializable {
     @Column(name = "deleted_at")
     private Date deletedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "created_user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private User createdBy;
-
-    @Transient
-    private String createdUserName;
-
     public Post() {
         super();
     }
@@ -60,22 +53,4 @@ public class Post implements Serializable {
         this.status = postForm.getStatus();
     }
 
-    public Integer getCreatedUserId() {
-        return createdUserId;
-    }
-
-    public void setCreatedUserId(Integer createdUserId) {
-        this.createdUserId = createdUserId;
-    }
-
-    public String getCreatedUserName() {
-        if (createdBy != null) {
-            return createdBy.getName();
-        }
-        return createdUserName;
-    }
-
-    public void setCreatedUserName(String createdUserName) {
-        this.createdUserName = createdUserName;
-    }
 }

@@ -13,7 +13,7 @@
         <li class="nav-item">
           <a class="nav-link text-success" href="${pageContext.request.contextPath}/posts/index">Posts</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" style="margin-left: 600px;">
           <a class="nav-link text-success" href="${pageContext.request.contextPath}/users/create">Create Users</a>
         </li>
         <li class="nav-item dropdown">

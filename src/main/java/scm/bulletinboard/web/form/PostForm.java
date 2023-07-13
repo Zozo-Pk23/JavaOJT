@@ -14,7 +14,7 @@ public class PostForm {
     private Long id;
 
     @NotEmpty(message = "Title must not be Empty.")
-    @Size(max = 255, message = "255 character is the maximum allowed.")
+    @Size(max = 255, message = "255 characters is the maximum allowed.")
     private String title;
 
     @NotEmpty(message = "Description must not be Empty.")

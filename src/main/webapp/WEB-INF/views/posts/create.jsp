@@ -15,7 +15,7 @@
           <div class="card">
             <div class="card-header bg-success text-light">Post Create</div>
             <div class="card-body">
-              <form:form action="/SCMBulletin_war/posts/add" method="post" modelAttribute="postForm">
+              <form:form action="${pageContext.request.contextPath}/posts/add" method="post" modelAttribute="postForm">
                 <div class="form-group row">
                   <label for="title" class="col-sm-2 col-form-label">Title</label>
                   <div class="col-sm-10">

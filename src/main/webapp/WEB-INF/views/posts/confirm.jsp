@@ -16,7 +16,7 @@
                     <div class="card">
                         <div class="card-header bg-success text-light">Post Confirm</div>
                         <div class="card-body">
-                            <form:form action="/SCMBulletin_war/posts/save" method="post">
+                            <form:form action="${pageContext.request.contextPath}/posts/save" method="post">
                                 <div class="form-group row">
                                     <label class="col-sm-2 col-form-label">Title</label>
                                     <div class="col-sm-10">
@@ -50,6 +50,7 @@
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
                     integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
                     crossorigin="anonymous"></script>
+                <jsp:include page="../common/footer.jsp" />
             </body>
 
             </html>

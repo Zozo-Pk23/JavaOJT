@@ -16,8 +16,8 @@
                     <div class="card">
                         <div class="card-header bg-success text-light">Edit Post</div>
                         <div class="card-body">
-                            <form:form action="/SCMBulletin_war/posts/update?id=${postForm.id}" method="post"
-                                modelAttribute="postForm">
+                            <form:form action="${pageContext.request.contextPath}/posts/update?id=${postForm.id}"
+                                method="post" modelAttribute="postForm">
                                 <div class="form-group row">
                                     <label for="title" class="col-sm-2 col-form-label">Title</label>
                                     <div class="col-sm-10">
@@ -46,8 +46,7 @@
                                 <div class="form-group row">
                                     <div class="col-sm-10 offset-sm-2">
                                         <button type="submit" class="btn btn-info text-light">Edit</button>
-                                        <input type="submit" class="btn btn-secondary text-light"
-                                            value="Clear"
+                                        <input type="submit" class="btn btn-secondary text-light" value="Clear"
                                             onclick="document.getElementById('title').value = null;document.getElementById('description').value = null; return false;">
                                     </div>
                                 </div>
@@ -58,6 +57,7 @@
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
                     integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
                     crossorigin="anonymous"></script>
+                <jsp:include page="../common/footer.jsp" />
             </body>
 
             </html>

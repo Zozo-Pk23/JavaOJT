@@ -6,11 +6,13 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import scm.bulletinboard.bl.dto.PostDto;
 import scm.bulletinboard.persistance.dao.PostDao;
 import scm.bulletinboard.persistance.entity.Post;
 import scm.bulletinboard.persistance.entity.User;
 import scm.bulletinboard.web.form.PostForm;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,17 +27,17 @@ public class PostDaoImpl implements PostDao {
     }
 
     @Override
-    public List<Post> getAllPosts(int pageNumber, int pageSize, String searchQuery, User user) {
+    public List<PostDto> getAllPosts(int pageNumber, int pageSize, String searchQuery, User user) {
         String userType = user.getType();
         Session session = sessionFactory.getCurrentSession();
-        String hql = "FROM Post p WHERE p.deletedAt IS NULL";
+        String hql = "SELECT p, u.name FROM Post p LEFT JOIN User u ON p.createdUserId = u.id WHERE p.deletedAt IS NULL";
         if (searchQuery != null && !searchQuery.isEmpty()) {
             hql += " AND (p.title LIKE :searchQuery OR p.description LIKE :searchQuery)";
         }
         if (userType.equals("1")) {
             hql += " AND p.createdUserId = :userId";
         }
-        Query<Post> query = session.createQuery(hql, Post.class);
+        Query<Object[]> query = session.createQuery(hql);
         if (userType.equals("1")) {
             query.setParameter("userId", user.getId());
         }
@@ -44,7 +46,16 @@ public class PostDaoImpl implements PostDao {
         }
         query.setFirstResult((pageNumber - 1) * pageSize);
         query.setMaxResults(pageSize);
-        return query.getResultList();
+
+        List<Object[]> results = query.getResultList();
+        List<PostDto> posts = new ArrayList<>();
+        for (Object[] result : results) {
+            Post post = (Post) result[0];
+            String userName = (String) result[1];
+            PostDto PostDto = new PostDto(post, userName);
+            posts.add(PostDto);
+        }
+        return posts;
     }
 
     @Override
@@ -69,11 +80,14 @@ public class PostDaoImpl implements PostDao {
     }
 
     @Override
-    public void savePost(PostForm postForm, Date currentDate) {
+    public void savePost(PostForm postForm, Date currentDate, Long userId) {
         Post post = new Post(postForm);
+        int id = userId.intValue();
         post.setStatus("1");
         post.setCreatedAt(currentDate);
-        post.setCreatedUserId(1);
+        post.setUpdatedAt(currentDate);
+        post.setCreatedUserId(id);
+        post.setUpdatedUserId(id);
         this.sessionFactory.getCurrentSession().save(post);
     }
 
@@ -84,9 +98,11 @@ public class PostDaoImpl implements PostDao {
     }
 
     @Override
-    public void updatePost(Post post) {
-        Session session = sessionFactory.getCurrentSession();
-        session.update(post);
+    public void updatePost(Post post, Date currentDate, Long userId) {
+        int id = userId.intValue();
+        post.setUpdatedUserId(id);
+        post.setUpdatedAt(currentDate);
+        this.sessionFactory.getCurrentSession().update(post);
     }
 
     @Override
@@ -100,4 +116,44 @@ public class PostDaoImpl implements PostDao {
         Session session = sessionFactory.getCurrentSession();
         session.save(post);
     }
+
+    @Override
+    public List<Post> download(User user) {
+        String userType = user.getType();
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "FROM Post p";
+        if (userType.equals("1")) {
+            hql += " WHERE p.createdUserId = :userId";
+        }
+        Query<Post> query = session.createQuery(hql, Post.class);
+        if (userType.equals("1")) {
+            query.setParameter("userId", user.getId());
+        }
+        return query.getResultList();
+    }
+
+    @Override
+    public Post findByTitle(String title) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("FROM Post WHERE title = :title", Post.class)
+                .setParameter("title", title)
+                .uniqueResult();
+    }
+
+    @Override
+    public Post getPostByUserId(Long postId, User user) {
+        String userType = user.getType();
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "FROM Post p WHERE p.deletedAt IS NULL AND p.id = :postId";
+        if (userType.equals("1")) {
+            hql += " AND p.createdUserId = :userId";
+        }
+        Query<Post> query = session.createQuery(hql, Post.class);
+        query.setParameter("postId", postId);
+        if (userType.equals("1")) {
+            query.setParameter("userId", user.getId());
+        }
+        return query.uniqueResult();
+    }
+
 }

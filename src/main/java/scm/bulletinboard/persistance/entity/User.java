@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import scm.bulletinboard.web.form.UserForm;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @Data
@@ -37,11 +37,11 @@ public class User {
     @Column(name = "deleted_user_id")
     private Integer deletedUserId;
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDate createdAt;
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private LocalDate updatedAt;
     @Column(name = "deleted_at")
-    private Date deletedAt;
+    private LocalDate deletedAt;
 
     public User() {
         super();
@@ -50,7 +50,7 @@ public class User {
     public User(UserForm userForm) {
         this.name = userForm.getName();
         this.email = userForm.getEmail();
-        this.password = userForm.getAddress();
+        this.password = userForm.getPassword();
         this.profile = userForm.getProfile();
         this.type = userForm.getType();
         this.phone = userForm.getPhone();
