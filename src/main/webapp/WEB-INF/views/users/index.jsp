@@ -7,6 +7,34 @@
 
                     <head>
                         <title>Title</title>
+                        <style>
+    table {
+      margin: auto;
+      border-collapse: collapse;
+      overflow-x: auto;
+      display: block;
+      width: fit-content;
+      max-width: 100%;
+      box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
+    }
+
+    td, th {
+      border: solid rgb(91, 143, 199) 1px;
+      padding: .5rem;
+    }
+
+    th {
+      text-align: center;
+      border-bottom: black solid 2px;
+      border-top: none;
+    }
+
+    td {
+      white-space: nowrap;
+      border-bottom: none;
+      color: rgb(20, 20, 20);
+    }
+                        </style>
                         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
                             rel="stylesheet"
                             integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
@@ -25,7 +53,7 @@
                                                 <%= message %>
                                             </div>
                                             <% } %>
-                                                <div class="row text-center">
+                                                <div class="row text-center my-1">
                                                     <form class="row"
                                                         action="${pageContext.request.contextPath}/users/index"
                                                         method="get">
@@ -81,17 +109,17 @@
 
 
                                                 </div>
-                                                <div class="table-responsive">
-                                                    <table class="table">
+                                                <div class="ui">
+                                                    <table>
                                                         <thead>
-                                                            <tr class="bg-info text-light">
+                                                            <tr class="text-light bg-info">
                                                                 <th>No</th>
                                                                 <th>Name</th>
                                                                 <th>Email</th>
-                                                                <th>Created User</th>
+                                                                <th>Created_User</th>
                                                                 <th>Type</th>
                                                                 <th>Phone</th>
-                                                                <th>Date of Birth</th>
+                                                                <th>Date_of_Birth</th>
                                                                 <th>Address</th>
                                                                 <th>Created_Date</th>
                                                                 <th>Updated_Date</th>
@@ -121,10 +149,12 @@
                                                                     <td>${user.user.dob}</td>
                                                                     <td>${user.user.address}</td>
                                                                     <td>
-                                                                        ${user.user.createdAt}
+                                                                    <fmt:formatDate pattern="yyyy/MM/dd"
+                                                                            value="${user.user.createdAt}" />
                                                                     </td>
                                                                     <td>
-                                                                        ${user.user.updatedAt}
+                                                                       <fmt:formatDate pattern="yyyy/MM/dd"
+                                                                            value="${user.user.updatedAt}" />
                                                                     </td>
                                                                     <td>
                                                                         <button type="button"
@@ -294,8 +324,9 @@
                                                     <tr>
                                                         <td>Created Date</td>
                                                         <td>
-                                                            ${user.user.createdAt}
-                                                        </td>
+                                                                       <fmt:formatDate pattern="yyyy/MM/dd"
+                                                                            value="${user.user.createdAt}" />
+                                                                    </td>
                                                     </tr>
                                                     <tr>
                                                         <td>Created User</td>
@@ -305,9 +336,11 @@
                                                     </tr>
                                                     <tr>
                                                         <td>Updated Date</td>
-                                                        <td>
-                                                            ${user.user.updatedAt}
-                                                        </td>
+                                                       <td>
+                                                                    <fmt:formatDate pattern="yyyy/MM/dd"
+                                                                            value="${user.user.updatedAt}" />
+                                                                    </td>
+                                                                    
                                                     </tr>
                                                     <tr>
                                                         <td>Updated User</td>

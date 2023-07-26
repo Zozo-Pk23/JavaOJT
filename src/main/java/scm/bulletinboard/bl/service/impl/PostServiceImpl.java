@@ -48,6 +48,7 @@ public class PostServiceImpl implements PostService {
 
     public List<String> upload(List<String[]> csvData, Integer id) {
         List<String> errorMessages = new ArrayList<>();
+        List<Post> postsToUpload = new ArrayList<>();
         for (int lineNumber = 0; lineNumber < csvData.size(); lineNumber++) {
             String[] line = csvData.get(lineNumber);
             if (line.length >= 3) {
@@ -63,6 +64,9 @@ public class PostServiceImpl implements PostService {
                 if (status.isEmpty()) {
                     errorMessages.add("Status is blank at line " + lineNumber);
                 }
+                if (!status.equals("0") && !status.equals("1")) {
+                    errorMessages.add("Invalid status value at line " + lineNumber);
+                }
                 if (checkIfTitleExists(title)) {
                     errorMessages.add("Title must be unique at line " + lineNumber);
                 }
@@ -75,9 +79,12 @@ public class PostServiceImpl implements PostService {
                     post.setUpdatedAt(new Date());
                     post.setCreatedUserId(id);
                     post.setUpdatedUserId(id);
-                    this.postDao.upload(post);
+                    postsToUpload.add(post);
                 }
             }
+        }
+        if(errorMessages.isEmpty()) {
+        this.postDao.upload(postsToUpload);
         }
         return errorMessages;
     }

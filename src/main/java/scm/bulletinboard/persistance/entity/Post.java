@@ -1,6 +1,5 @@
 package scm.bulletinboard.persistance.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,7 +10,7 @@ import scm.bulletinboard.web.form.PostForm;
 @Data
 @Entity
 @Table(name = "posts")
-public class Post implements Serializable {
+public class Post{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -51,6 +50,12 @@ public class Post implements Serializable {
         this.title = postForm.getTitle();
         this.description = postForm.getDescription();
         this.status = postForm.getStatus();
+        this.createdUserId=postForm.getCreatedUserId();
+        this.updatedUserId = postForm.getUpdatedUserId();
+        this.deletedUserId=postForm.getDeletedUserId();
+        this.createdAt=postForm.getCreatedAt();
+        this.updatedAt=postForm.getUpdatedAt();
+        this.deletedAt=postForm.getDeletedAt();
     }
 
 }

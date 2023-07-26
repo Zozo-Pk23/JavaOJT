@@ -30,7 +30,8 @@ public class PostDaoImpl implements PostDao {
     public List<PostDto> getAllPosts(int pageNumber, int pageSize, String searchQuery, User user) {
         String userType = user.getType();
         Session session = sessionFactory.getCurrentSession();
-        String hql = "SELECT p, u.name FROM Post p LEFT JOIN User u ON p.createdUserId = u.id WHERE p.deletedAt IS NULL";
+        String hql = "SELECT p, u.name , u2.name FROM Post p LEFT JOIN User u ON p.createdUserId = u.id "
+                + "LEFT JOIN User u2 ON  p.updatedUserId = u2.id WHERE p.deletedAt IS NULL";
         if (searchQuery != null && !searchQuery.isEmpty()) {
             hql += " AND (p.title LIKE :searchQuery OR p.description LIKE :searchQuery)";
         }
@@ -51,8 +52,9 @@ public class PostDaoImpl implements PostDao {
         List<PostDto> posts = new ArrayList<>();
         for (Object[] result : results) {
             Post post = (Post) result[0];
-            String userName = (String) result[1];
-            PostDto PostDto = new PostDto(post, userName);
+            String createdUserName = (String) result[1];
+            String updatedUserName = (String) result[2];
+            PostDto PostDto = new PostDto(post, createdUserName, updatedUserName);
             posts.add(PostDto);
         }
         return posts;
@@ -112,9 +114,11 @@ public class PostDaoImpl implements PostDao {
     }
 
     @Override
-    public void upload(Post post) {
+    public void upload(List<Post> posts) {
         Session session = sessionFactory.getCurrentSession();
-        session.save(post);
+        for (Post post : posts) {
+            session.save(post);
+        }
     }
 
     @Override

@@ -16,6 +16,7 @@ import scm.bulletinboard.persistance.entity.User;
 import scm.bulletinboard.web.form.UserForm;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Transactional(propagation = Propagation.REQUIRED)
@@ -32,12 +33,12 @@ public class UserServiceImpl implements UserService {
     }
 
     public List<UserDto> getAllUsers(int pageNumber, int pageSize, User user, String searchName, String searchEmail,
-            LocalDate searchStartDate, LocalDate searchEndDate) {
+    		Date searchStartDate, Date searchEndDate) {
         return userDao.getAllUsers(pageNumber, pageSize, user, searchName, searchEmail, searchStartDate, searchEndDate);
     }
 
     public void saveUser(UserForm userForm, Long userId) {
-        this.userDao.saveUser(userForm, LocalDate.now(), userId);
+        this.userDao.saveUser(userForm, new Date(), userId);
     }
 
     public User getUserById(Long userId) {
@@ -52,8 +53,8 @@ public class UserServiceImpl implements UserService {
         this.userDao.deleteUser(user);
     }
 
-    public int getTotalUsersCount(User user, String searchName, String searchEmail, LocalDate searchStartDate,
-            LocalDate searchEndDate) {
+    public int getTotalUsersCount(User user, String searchName, String searchEmail, Date searchStartDate,
+            Date searchEndDate) {
         return this.userDao.getTotalUsersCount(user, searchName, searchEmail, searchStartDate, searchEndDate);
     }
 
@@ -88,6 +89,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public User registerUser(UserForm userForm) {
-        return this.userDao.registerUser(userForm, LocalDate.now());
+        return this.userDao.registerUser(userForm, new Date());
     }
 }

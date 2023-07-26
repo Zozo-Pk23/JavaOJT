@@ -14,6 +14,7 @@ import scm.bulletinboard.web.form.UserForm;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -28,7 +29,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<UserDto> getAllUsers(int pageNumber, int pageSize, User user, String searchName, String searchEmail,
-            LocalDate searchStartDate, LocalDate searchEndDate) {
+            Date searchStartDate, Date searchEndDate) {
 
         String userType = user.getType();
         Session session = sessionFactory.getCurrentSession();
@@ -93,8 +94,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public int getTotalUsersCount(User user, String searchName, String searchEmail, LocalDate searchStartDate,
-            LocalDate searchEndDate) {
+    public int getTotalUsersCount(User user, String searchName, String searchEmail, Date searchStartDate,
+            Date searchEndDate) {
         String userType = user.getType();
         Session session = sessionFactory.getCurrentSession();
         String hql = "SELECT COUNT(*) FROM User u WHERE u.deletedAt IS NULL";
@@ -149,7 +150,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void saveUser(UserForm userForm, LocalDate currentDate, Long userid) {
+    public void saveUser(UserForm userForm, Date currentDate, Long userid) {
         User user = new User(userForm);
         int id = userid.intValue();
         user.setCreatedAt(currentDate);
@@ -180,7 +181,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User registerUser(UserForm userForm, LocalDate currentDate) {
+    public User registerUser(UserForm userForm, Date currentDate) {
         User user = new User(userForm);
         user.setCreatedAt(currentDate);
         user.setUpdatedAt(currentDate);

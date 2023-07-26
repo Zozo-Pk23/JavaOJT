@@ -5,11 +5,12 @@ import scm.bulletinboard.persistance.entity.User;
 import scm.bulletinboard.web.form.UserForm;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public interface UserService {
         public List<UserDto> getAllUsers(int pageNumber, int pageSize, User user, String searchName, String searchEmail,
-                        LocalDate searchStartDate, LocalDate searchEndDate);
+                        Date searchStartDate, Date searchEndDate);
 
         public void saveUser(UserForm userForm, Long userId);
 
@@ -20,7 +21,7 @@ public interface UserService {
         public void deleteUser(User user);
 
         int getTotalUsersCount(User user, String searchName, String searchEmail,
-                        LocalDate searchStartDate, LocalDate searchEndDate);
+                        Date searchStartDate, Date searchEndDate);
 
         boolean checkIfEmailExists(String email);
 

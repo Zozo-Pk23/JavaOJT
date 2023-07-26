@@ -3,7 +3,8 @@ package scm.bulletinboard.web.form;
 import lombok.*;
 import scm.bulletinboard.persistance.entity.User;
 
-import java.time.LocalDate;
+import java.util.Date;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.Email;
@@ -30,9 +31,9 @@ public class UserForm {
     private Integer createdUserId;
     private Integer updatedUserId;
     private Integer deletedUserId;
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
-    private LocalDate deletedAt;
+    private Date createdAt;
+    private Date updatedAt;
+    private Date deletedAt;
     private MultipartFile profileFile;
 
     public UserForm(User user) {

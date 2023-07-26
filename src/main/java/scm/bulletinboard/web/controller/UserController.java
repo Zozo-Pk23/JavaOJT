@@ -1,6 +1,8 @@
 package scm.bulletinboard.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +23,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,43 +34,35 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private int calculateTotalPages(int pageSize, int totalUsers) {
         return (int) Math.ceil((double) totalUsers / pageSize);
     }
 
     @GetMapping("/users/index")
     public ModelAndView userList(@RequestParam(defaultValue = "1") int pageNumber,
-            @RequestParam(required = false) String searchName,
-            @RequestParam(required = false) String searchEmail,
-            @RequestParam(required = false) String searchStartDate,
-            @RequestParam(required = false) String searchEndDate, HttpSession session) {
-
-        LocalDate startDate = null;
-        if (searchStartDate != null && !searchStartDate.isEmpty()) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            startDate = LocalDate.parse(searchStartDate, formatter);
-        }
-
-        LocalDate endDate = null;
-        if (searchEndDate != null && !searchEndDate.isEmpty()) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            endDate = LocalDate.parse(searchEndDate, formatter);
-        }
+                                 @RequestParam(required = false) String searchName,
+                                 @RequestParam(required = false) String searchEmail,
+                                 @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date searchStartDate,
+                                 @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date searchEndDate,
+                                 HttpSession session) {
 
         User user = (User) session.getAttribute("user");
         int pageSize = 5;
         ModelAndView userListView = new ModelAndView("users/index");
         List<UserDto> users = this.userService.getAllUsers(pageNumber, pageSize, user, searchName, searchEmail,
-                startDate, endDate);
-        int totalUsers = this.userService.getTotalUsersCount(user, searchName, searchEmail, startDate, endDate);
+                searchStartDate, searchEndDate);
+        int totalUsers = this.userService.getTotalUsersCount(user, searchName, searchEmail, searchStartDate, searchEndDate);
         userListView.addObject("users", users);
         userListView.addObject("currentPage", pageNumber);
         userListView.addObject("totalPages", calculateTotalPages(pageSize, totalUsers));
         userListView.addObject("totalUsers", totalUsers);
         userListView.addObject("searchName", searchName);
         userListView.addObject("searchEmail", searchEmail);
-        userListView.addObject("searchStartDate", startDate);
-        userListView.addObject("searchEndDate", endDate);
+        userListView.addObject("searchStartDate", searchStartDate);
+        userListView.addObject("searchEndDate", searchEndDate);
         return userListView;
     }
 
@@ -120,22 +115,25 @@ public class UserController {
     }
 
     @PostMapping("/users/save")
-    public ModelAndView saveUser(@ModelAttribute("userForm") UserForm userForm,HttpSession session) {
+    public ModelAndView saveUser(@ModelAttribute("userForm") UserForm userForm, HttpSession session) {
         User user = (User) session.getAttribute("user");
+        String simeplePassword = userForm.getPassword();
+        String hashPassword = passwordEncoder.encode(simeplePassword);
+        userForm.setPassword(hashPassword);
         Long userId = user.getId();
-        this.userService.saveUser(userForm,userId);
+        this.userService.saveUser(userForm, userId);
         String message = "User successfully created";
         ModelAndView userListView = new ModelAndView("redirect:/users/index?created=" + message);
         return userListView;
     }
 
     @PostMapping("users/delete")
-    public ModelAndView deleteUser(@RequestParam("id") Long userId,HttpSession session) {
+    public ModelAndView deleteUser(@RequestParam("id") Long userId, HttpSession session) {
         User auth = (User) session.getAttribute("user");
-        int authId=auth.getId().intValue();
+        int authId = auth.getId().intValue();
         User user = userService.getUserById(userId);
         if (user != null) {
-            user.setDeletedAt(LocalDate.now());
+            user.setDeletedAt(new Date());
             user.setDeletedUserId(authId);
             userService.deleteUser(user);
         }
@@ -208,7 +206,7 @@ public class UserController {
             user.setAddress(userForm.getAddress());
             user.setProfile(userForm.getProfile());
             user.setUpdatedUserId(userId);
-            user.setUpdatedAt(LocalDate.now());
+            user.setUpdatedAt(new Date());
             userService.updateUser(user);
         }
         String message = "User profile successfully updated";

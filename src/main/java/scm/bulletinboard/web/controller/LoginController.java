@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,14 +33,16 @@ public class LoginController {
 
     private final SessionFactory sessionFactory;
     private final UserService userService;
-
+    private final PasswordEncoder passwordEncoder;
+    
     @Autowired
-    public LoginController(SessionFactory sessionFactory, UserService userService) {
-        this.sessionFactory = sessionFactory;
-        this.userService = userService;
+    public LoginController(SessionFactory sessionFactory,UserService userService,PasswordEncoder passwordEncoder) {
+    	this.sessionFactory = sessionFactory;
+    	this.userService = userService;
+    	this.passwordEncoder= passwordEncoder;
     }
-
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    
+    @RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
     public ModelAndView showLoginPage() {
         ModelAndView loginPage = new ModelAndView("auth/login");
         loginPage.addObject("loginform", new LoginForm());
@@ -58,11 +61,11 @@ public class LoginController {
         Query<User> query = hibernateSession.createQuery(queryStr, User.class);
         query.setParameter("email", email);
         User user = query.uniqueResult();
-
         if (user == null) {
             model.addAttribute("emailNotFound", "Email does not exists");
             return "auth/login";
-        } else if (!user.getPassword().equals(password)) {
+        }
+        if (!passwordEncoder.matches(loginForm.getPassword(), user.getPassword())) {
             model.addAttribute("incorrectPassword", "Incorrect password!!");
             return "auth/login";
         } else {
@@ -88,10 +91,9 @@ public class LoginController {
     public String changePassword(@ModelAttribute("passwordForm") @Valid ResetPasswordForm resetPasswordForm,
             BindingResult bindingResult, Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        String oldPassword = user.getPassword();
         if (bindingResult.hasErrors()) {
             return "auth/passwordReset";
-        } else if (!resetPasswordForm.getOldPassword().equals(oldPassword)) {
+        } else if (!passwordEncoder.matches(resetPasswordForm.getOldPassword(), user.getPassword())) {
             bindingResult.rejectValue("oldPassword", "error.oldPassword",
                     "Current Password is wrong");
             return "auth/passwordReset";
@@ -101,7 +103,9 @@ public class LoginController {
             return "auth/passwordReset";
         }
         User userData = userService.getUserById(user.getId());
-        userData.setPassword(resetPasswordForm.getNewPassword());
+        String hashPassword = passwordEncoder.encode(resetPasswordForm.getNewPassword());
+        userData.setPassword(hashPassword);
+        this.userService.updateUser(userData);
         String message = "Password is successfully updated.";
         return "redirect:/users/index?created=" + message;
     }
@@ -126,7 +130,7 @@ public class LoginController {
         User sendUser = this.userService.getUserByEmail(email);
         String userName = sendUser.getName();
         String token = UUID.randomUUID().toString();
-        String resetLink = "http://localhost:8080/SCMBulletin_war/resetPasswordForm?token=" + token + "&email=" + email;
+        String resetLink = request.getContextPath()+"/resetPasswordForm?token=" + token + "&email=" + email;
         this.userService.sendPasswordResetEmail(email, resetLink, userName);
         model.addAttribute("success", "Email sent with password reset instructions.");
         return "auth/forgotPassword";
@@ -155,7 +159,7 @@ public class LoginController {
             return "auth/passwordConfirmation";
         }
         User user = this.userService.getUserByEmail(email);
-        user.setPassword(resetPasswordForm.getNewPassword());
+        user.setPassword(passwordEncoder.encode(resetPasswordForm.getNewPassword()));
         userService.updateUser(user);
         String message = "Password has been reset";
         return "redirect:/login?created=" + message;
@@ -181,8 +185,9 @@ public class LoginController {
             bindingResult.rejectValue("email", "error.email", "Email is already existed");
             return "auth/userRegister";
         }
+        userForm.setPassword(passwordEncoder.encode(userForm.getPassword()));
         userForm.setType("1");
-        User saveduser=this.userService.registerUser(userForm);
+        User saveduser = this.userService.registerUser(userForm);
         session.setAttribute("user", saveduser);
         String message = "User sign up successful.";
         return "redirect:/posts/index?created=" + message;

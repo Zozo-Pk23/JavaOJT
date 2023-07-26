@@ -53,13 +53,13 @@
                                                         </form>
                                                     </div>
                                                     <table class="table">
-                                                        <thead class="bg-info text-light">
+                                                        <thead>
                                                             <tr>
-                                                                <th>Post Title</th>
-                                                                <th>Post Description</th>
-                                                                <th>Posted User</th>
-                                                                <th>Posted Date</th>
-                                                                <th>Operation</th>
+                                                                <th class="bg-info text-light">Post Title</th>
+                                                                <th class="bg-info text-light">Post Description</th>
+                                                                <th class="bg-info text-light">Posted User</th>
+                                                                <th class="bg-info text-light">Posted Date</th>
+                                                                <th class="bg-info text-light">Operation</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -228,10 +228,22 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
+                                                        <td>Created User</td>
+                                                        <td>
+                                                            ${post.userName}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
                                                         <td>Updated At</td>
                                                         <td>
                                                             <fmt:formatDate value="${post.post.updatedAt}"
                                                                 pattern="dd-MM-yyyy" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Update User</td>
+                                                        <td>
+                                                            ${post.updatedUserName}
                                                         </td>
                                                     </tr>
                                                 </table>

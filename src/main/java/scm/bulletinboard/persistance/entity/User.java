@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import scm.bulletinboard.web.form.UserForm;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @AllArgsConstructor
 @Data
@@ -37,11 +37,11 @@ public class User {
     @Column(name = "deleted_user_id")
     private Integer deletedUserId;
     @Column(name = "created_at")
-    private LocalDate createdAt;
+    private Date createdAt;
     @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    private Date updatedAt;
     @Column(name = "deleted_at")
-    private LocalDate deletedAt;
+    private Date deletedAt;
 
     public User() {
         super();

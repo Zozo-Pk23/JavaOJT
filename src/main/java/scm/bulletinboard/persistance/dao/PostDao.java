@@ -19,7 +19,7 @@ public interface PostDao {
 
     public void deletePost(Post post);
 
-    public void upload(Post post);
+    public void upload(List<Post> posts);
 
     int getTotalPostsCount(String searchQuery, User user);
 

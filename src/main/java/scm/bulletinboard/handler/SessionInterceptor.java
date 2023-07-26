@@ -17,6 +17,7 @@ public class SessionInterceptor implements HandlerInterceptor {
                 request.getRequestURI().equals(request.getContextPath() + "/resetPasswordForm") ||
                 request.getRequestURI().equals(request.getContextPath() + "/reset/password") ||
                 request.getRequestURI().equals(request.getContextPath() + "/register") ||
+                request.getRequestURI().equals(request.getContextPath() + "/") ||
                 request.getRequestURI().equals(request.getContextPath() + "/registered")) {
             HttpSession session = request.getSession(false);
             if (session != null && session.getAttribute("user") != null) {
@@ -44,6 +45,9 @@ public class SessionInterceptor implements HandlerInterceptor {
             return true;
         }
         if (request.getRequestURI().equals(request.getContextPath() + "/registered")) {
+            return true;
+        }
+        if (request.getRequestURI().equals(request.getContextPath() + "/")) {
             return true;
         }
         HttpSession session = request.getSession(false);
